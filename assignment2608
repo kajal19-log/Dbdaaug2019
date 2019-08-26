@@ -1,0 +1,236 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 5
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show tables;
++-------------------------+
+| Tables_in_adventurework |
++-------------------------+
+| chardata                |
+| productcategory         |
++-------------------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into chardata values ('123','123','longer data are accepted here');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into chardata values ('45','45','longer data are accepted here');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from chardata;
++------+------+-------------------------------+
+| a    | b    | c                             |
++------+------+-------------------------------+
+| 123  | 123  | longer data are accepted here |
+| 45   | 45   | longer data are accepted here |
++------+------+-------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> describe chardata;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| a     | char(10)    | YES  |     | NULL    |       |
+| b     | varchar(20) | YES  |     | NULL    |       |
+| c     | text        | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+3 rows in set (0.03 sec)
+
+mysql> insert into Numdatatype values (13,130,33456,333456,33333456,999999.99,999999.9,999999.99);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into Numdatatype values (151,130,3456,33456,333456,99999.99,999999.9,999999.99);
+ERROR 1264 (22003): Out of range value for column 'A' at row 1
+mysql> insert into Numdatatype values (11,130,3456,33456,333456,99999.99,999999.9,999999.99);
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from numdatatype;
++------+------+-------+--------+----------+-----------+-----------+---------+
+| A    | B    | C     | D      | E        | F         | G         | H       |
++------+------+-------+--------+----------+-----------+-----------+---------+
+|   13 |  130 | 33456 | 333456 | 33333456 | 999999.99 | 999999.90 | 1000000 |
+|   11 |  130 |  3456 |  33456 |   333456 |  99999.99 | 999999.90 | 1000000 |
++------+------+-------+--------+----------+-----------+-----------+---------+
+2 rows in set (0.00 sec)
+
+mysql> insert into Numdatatype values (11,130,3456,33456,333456,99999.99,999.9,999999.99);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from numdatatype;
++------+------+-------+--------+----------+-----------+-----------+---------+
+| A    | B    | C     | D      | E        | F         | G         | H       |
++------+------+-------+--------+----------+-----------+-----------+---------+
+|   13 |  130 | 33456 | 333456 | 33333456 | 999999.99 | 999999.90 | 1000000 |
+|   11 |  130 |  3456 |  33456 |   333456 |  99999.99 | 999999.90 | 1000000 |
+|   11 |  130 |  3456 |  33456 |   333456 |  99999.99 |    999.90 | 1000000 |
++------+------+-------+--------+----------+-----------+-----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> create table datedatatype
+    -> ( a date,
+    -> b datetime,c timestamp,d time);
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> insert into datedatatype values (current_date(),now(),now(),now());
+Query OK, 1 row affected (0.06 sec)
+
+mysql> select * from datedatatype;
++------------+---------------------+---------------------+----------+
+| a          | b                   | c                   | d        |
++------------+---------------------+---------------------+----------+
+| 2019-08-26 | 2019-08-26 19:25:45 | 2019-08-26 19:25:45 | 19:25:45 |
++------------+---------------------+---------------------+----------+
+1 row in set (0.00 sec)
+
+mysql> insert into datedatatype values ('2019-08-26 10:30:23456','2019-08-26 10:30:23','10:30:23');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+
+mysql> insert into datedatatype values ('2019-08-26 10:30:23','2019-08-26 10:30:23','2019-08-26 10:30:23','10:30:23');
+Query OK, 1 row affected, 1 warning (0.02 sec)
+
+mysql> select * from datedatatype;
++------------+---------------------+---------------------+----------+
+| a          | b                   | c                   | d        |
++------------+---------------------+---------------------+----------+
+| 2019-08-26 | 2019-08-26 19:25:45 | 2019-08-26 19:25:45 | 19:25:45 |
+| 2019-08-26 | 2019-08-26 10:30:23 | 2019-08-26 10:30:23 | 10:30:23 |
++------------+---------------------+---------------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> select * from productcategory
+    -> order by name;
+Empty set (0.02 sec)
+
+mysql> insert into productcategory values(1,'bike');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into productcategory values(2,'accessories');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into productcategory values(3,'clothing');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into productcategory values(4,'components');
+Query OK, 1 row affected (0.04 sec)
+
+mysql> insert into productcategory values(5,'miscelleneous');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from productcategory
+    -> order by name;
++-------------------+---------------+
+| ProductCategoryId | Name          |
++-------------------+---------------+
+|                 2 | accessories   |
+|                 1 | bike          |
+|                 3 | clothing      |
+|                 4 | components    |
+|                 5 | miscelleneous |
++-------------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from productcategory
+    -> order by name desc;
++-------------------+---------------+
+| ProductCategoryId | Name          |
++-------------------+---------------+
+|                 5 | miscelleneous |
+|                 4 | components    |
+|                 3 | clothing      |
+|                 1 | bike          |
+|                 2 | accessories   |
++-------------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from productcategory
+    -> order by productcategoryid desc;
++-------------------+---------------+
+| ProductCategoryId | Name          |
++-------------------+---------------+
+|                 5 | miscelleneous |
+|                 4 | components    |
+|                 3 | clothing      |
+|                 2 | accessories   |
+|                 1 | bike          |
++-------------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from productcategory
+    -> order by productcategoryid ;
++-------------------+---------------+
+| ProductCategoryId | Name          |
++-------------------+---------------+
+|                 1 | bike          |
+|                 2 | accessories   |
+|                 3 | clothing      |
+|                 4 | components    |
+|                 5 | miscelleneous |
++-------------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select productcategoryid as id, name from productcategory
+    -> order by 2;
++----+---------------+
+| id | name          |
++----+---------------+
+|  2 | accessories   |
+|  1 | bike          |
+|  3 | clothing      |
+|  4 | components    |
+|  5 | miscelleneous |
++----+---------------+
+5 rows in set (0.00 sec)
+
+mysql> select productcategoryid as id, name from productcategory
+    -> order by 3;
+ERROR 1054 (42S22): Unknown column '3' in 'order clause'
+mysql> select productcategoryid as id, name from productcategory limit 2,4;
++----+---------------+
+| id | name          |
++----+---------------+
+|  3 | clothing      |
+|  4 | components    |
+|  5 | miscelleneous |
++----+---------------+
+3 rows in set (0.00 sec)
+
+mysql> select productcategoryid as id, name from productcategory offset 3;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '3' at line 1
+mysql> select productcategoryid as id, name from productcategory limit 1,3;
++----+-------------+
+| id | name        |
++----+-------------+
+|  2 | accessories |
+|  3 | clothing    |
+|  4 | components  |
++----+-------------+
+3 rows in set (0.00 sec)
+
+mysql> create table specialdatatype
+    -> (
+    -> id int auto_increment primary key,
+    -> membership enum('silver','golden','platinum'),
+    -> hobbies set ('swimming','cricket','sking','football'));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into specialdatatype (membership,hobbies) values('silver','sking,cricket');
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from specialdatatype;
++----+------------+---------------+
+| id | membership | hobbies       |
++----+------------+---------------+
+|  1 | silver     | cricket,sking |
++----+------------+---------------+
+1 row in set (0.00 sec)
+
+mysql>
