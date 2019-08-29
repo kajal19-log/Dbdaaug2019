@@ -1,0 +1,95 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use adventurework
+Database changed
+mysql> create table book
+    -> (
+    -> bookid int auto_increment primary key,
+    -> Bookname varchar(20) not null,
+    -> price decimal(6,2));
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> describe book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| bookid   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Bookname | varchar(20)  | NO   |     | NULL    |                |
+| price    | decimal(6,2) | YES  |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+3 rows in set (0.02 sec)
+
+mysql> alter table book add column Author varchar(30) not null;
+Query OK, 0 rows affected (0.16 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> describe book;
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| bookid   | int(11)      | NO   | PRI | NULL    | auto_increment |
+| Bookname | varchar(20)  | NO   |     | NULL    |                |
+| price    | decimal(6,2) | YES  |     | NULL    |                |
+| Author   | varchar(30)  | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+4 rows in set (0.07 sec)
+
+mysql> alter table book drop column Author varchar(30);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'varchar(30)' at line 1
+mysql> alter table book drop column Author;
+Query OK, 0 rows affected (0.23 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into book(bookname,price)values('MySQL for dummies',350),('MySQL for Developers',560);
+Query OK, 2 rows affected (0.03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from book;
++--------+----------------------+--------+
+| bookid | Bookname             | price  |
++--------+----------------------+--------+
+|      1 | MySQL for dummies    | 350.00 |
+|      2 | MySQL for Developers | 560.00 |
++--------+----------------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> insert into book(bookname,price)values('HTML5',NULL),('java unleashed',-560);
+Query OK, 2 rows affected (0.05 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from book;
++--------+----------------------+---------+
+| bookid | Bookname             | price   |
++--------+----------------------+---------+
+|      1 | MySQL for dummies    |  350.00 |
+|      2 | MySQL for Developers |  560.00 |
+|      3 | HTML5                |    NULL |
+|      4 | java unleashed       | -560.00 |
++--------+----------------------+---------+
+4 rows in set (0.00 sec)
+
+mysql> delete from book where bookid=4;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from book;
++--------+----------------------+--------+
+| bookid | Bookname             | price  |
++--------+----------------------+--------+
+|      1 | MySQL for dummies    | 350.00 |
+|      2 | MySQL for Developers | 560.00 |
+|      3 | HTML5                |   NULL |
++--------+----------------------+--------+
+3 rows in set (0.00 sec)
+
+mysql>
