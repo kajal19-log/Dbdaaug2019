@@ -1,0 +1,327 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 1
+Server version: 5.5.61 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> use adventurework
+Database changed
+mysql> create table A
+    -> ( x int,y int, constraint A_pk primary key(x,y));
+Query OK, 0 rows affected (0.21 sec)
+
+mysql> create table B
+    -> ( x int, y int,constraint B_fk foreign key (x,y) reference A(x,y));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'reference A(x,y))' at line 2
+mysql> ( x int, y int,constraint B_fk foreign key (x,y)' reference A(x,y)');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'x int, y int,constraint B_fk foreign key (x,y)' reference A(x,y)')' at line 1
+mysql> ( x int, y int,constraint B_fk foreign key (x,y)' references A(x,y)');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'x int, y int,constraint B_fk foreign key (x,y)' references A(x,y)')' at line 1
+mysql> ( x int, y int,constraint B_fk foreign key (x,y) references A(x,y));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'x int, y int,constraint B_fk foreign key (x,y) references A(x,y))' at line 1
+mysql> create table B
+    -> (x int references A(x),y int) Engine =InnoDB;
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> insert into A values(1,1);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into A values(1,2);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into A values(2,2);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into A values(1,1);
+ERROR 1062 (23000): Duplicate entry '1-1' for key 'PRIMARY'
+mysql>  insert into B values (1,1);
+Query OK, 1 row affected (0.03 sec)
+
+mysql>  insert into B values (2,1);
+Query OK, 1 row affected (0.05 sec)
+
+mysql>  insert into B values (3,2);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from A;
++---+---+
+| x | y |
++---+---+
+| 1 | 1 |
+| 1 | 2 |
+| 2 | 2 |
++---+---+
+3 rows in set (0.00 sec)
+
+mysql> select * from B;
++------+------+
+| x    | y    |
++------+------+
+|    1 |    1 |
+|    2 |    1 |
+|    3 |    2 |
++------+------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> create table location
+    -> ( locationid int loc_pk primary key,city varchar(20), address varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'loc_pk primary key,city varchar(20), address varchar(20))' at line 2
+mysql> ( locationid int primary key,city varchar(20), address varchar(20));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'locationid int primary key,city varchar(20), address varchar(20))' at line 1
+mysql> create table location
+    -> ( locationid int primary key,city varchar(20), address varchar(20));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>  creat table department
+    -> ( deptid int primary key,dname varchar(20) not null,locationid int references location (locationid)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'creat table department
+( deptid int primary key,dname varchar(20) not null,loca' at line 1
+mysql>  create table department
+    -> ( deptid int primary key,dname varchar(20) not null,locationid int references location (locationid)
+    -> );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> create table employee
+    -> ( empid int primary key,fname varchar(20) not null,lname(20) not null,deptid int references department(deptid),mgrid int references employee(empid));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(20) not null,deptid int references department(deptid),mgrid int references empl' at line 2
+mysql> create table employee
+    -> ( empid int primary key,fname varchar(20) not null,lname varchar(20) not null,deptid int references department(deptid),mgrid int references employee(empid),salary decimal(10,2));
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> insert into location values(1,'Mumbai','MBP'),(2,'Bangalore','ITPL');
+Query OK, 2 rows affected (0.04 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into location values(3,'Pune','Hinjewadi'),(4,'Gurgaon','DLF 2');
+Query OK, 2 rows affected (0.03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into Department values(101,'Sales',1),(102,'HR',3),(103,'Finance',2),(104,'MKTG',3),(105,'OPS',4),(106,'IT',4);
+Query OK, 6 rows affected (0.02 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> insert into employee values(1001,'Steven','King',105,NULL,50000),(1003,'Nancy','Greenberg',102,1001,35000),(1002,'Neena','Kochhar',105,1003,40000),(1004,'Andrew','Lusk',101,1002,15000),(1006,'Andy','Hillman',105,1001,30000),(1005,'Pamela','Davis',NULL,1002,14000),(1007,'Rene','Lopez',105,1001,11000),(1009,'Sue','Fisher',105,1001,10000),(1008,'Tanya','Rff',105,1001,10000);
+Query OK, 9 rows affected (0.04 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> select* from location;
++------------+-----------+-----------+
+| locationid | city      | address   |
++------------+-----------+-----------+
+|          1 | Mumbai    | MBP       |
+|          2 | Bangalore | ITPL      |
+|          3 | Pune      | Hinjewadi |
+|          4 | Gurgaon   | DLF 2     |
++------------+-----------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> select* from department;
++--------+---------+------------+
+| deptid | dname   | locationid |
++--------+---------+------------+
+|    101 | Sales   |          1 |
+|    102 | HR      |          3 |
+|    103 | Finance |          2 |
+|    104 | MKTG    |          3 |
+|    105 | OPS     |          4 |
+|    106 | IT      |          4 |
++--------+---------+------------+
+6 rows in set (0.00 sec)
+
+mysql> select* from employee;
++-------+--------+-----------+--------+-------+----------+
+| empid | fname  | lname     | deptid | mgrid | salary   |
++-------+--------+-----------+--------+-------+----------+
+|  1001 | Steven | King      |    105 |  NULL | 50000.00 |
+|  1002 | Neena  | Kochhar   |    105 |  1003 | 40000.00 |
+|  1003 | Nancy  | Greenberg |    102 |  1001 | 35000.00 |
+|  1004 | Andrew | Lusk      |    101 |  1002 | 15000.00 |
+|  1005 | Pamela | Davis     |   NULL |  1002 | 14000.00 |
+|  1006 | Andy   | Hillman   |    105 |  1001 | 30000.00 |
+|  1007 | Rene   | Lopez     |    105 |  1001 | 11000.00 |
+|  1008 | Tanya  | Rff       |    105 |  1001 | 10000.00 |
+|  1009 | Sue    | Fisher    |    105 |  1001 | 10000.00 |
++-------+--------+-----------+--------+-------+----------+
+9 rows in set (0.00 sec)
+
+mysql> select dname,city,address from department inner join location on department.locationid=location.locationid;
++---------+-----------+-----------+
+| dname   | city      | address   |
++---------+-----------+-----------+
+| Sales   | Mumbai    | MBP       |
+| Finance | Bangalore | ITPL      |
+| HR      | Pune      | Hinjewadi |
+| MKTG    | Pune      | Hinjewadi |
+| OPS     | Gurgaon   | DLF 2     |
+| IT      | Gurgaon   | DLF 2     |
++---------+-----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select dname,city,address from department left outer join location on department.locationid=location.locationid;
++---------+-----------+-----------+
+| dname   | city      | address   |
++---------+-----------+-----------+
+| Sales   | Mumbai    | MBP       |
+| HR      | Pune      | Hinjewadi |
+| Finance | Bangalore | ITPL      |
+| MKTG    | Pune      | Hinjewadi |
+| OPS     | Gurgaon   | DLF 2     |
+| IT      | Gurgaon   | DLF 2     |
++---------+-----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> insert into location values(5,'Hydrabad',NULL);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select dname,city,address from department left outer join location on department.locationid=location.locationid;
++---------+-----------+-----------+
+| dname   | city      | address   |
++---------+-----------+-----------+
+| Sales   | Mumbai    | MBP       |
+| HR      | Pune      | Hinjewadi |
+| Finance | Bangalore | ITPL      |
+| MKTG    | Pune      | Hinjewadi |
+| OPS     | Gurgaon   | DLF 2     |
+| IT      | Gurgaon   | DLF 2     |
++---------+-----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select dname,city,address from department right outer join location on department.locationid=location.locationid;
++---------+-----------+-----------+
+| dname   | city      | address   |
++---------+-----------+-----------+
+| Sales   | Mumbai    | MBP       |
+| Finance | Bangalore | ITPL      |
+| HR      | Pune      | Hinjewadi |
+| MKTG    | Pune      | Hinjewadi |
+| OPS     | Gurgaon   | DLF 2     |
+| IT      | Gurgaon   | DLF 2     |
+| NULL    | Hydrabad  | NULL      |
++---------+-----------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> --display dept without loc
+    -> .
+    -> select dname,city,address from department right outer join location on department.locationid=location.locationid where dname is null;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '--display dept without loc
+.
+select dname,city,address from department right out' at line 1
+mysql> select dname,city,address from department right outer join location on department.locationid=location.locationid where dname is null;
++-------+----------+---------+
+| dname | city     | address |
++-------+----------+---------+
+| NULL  | Hydrabad | NULL    |
++-------+----------+---------+
+1 row in set (0.00 sec)
+
+mysql> select dname,city,address from department right outer join location on department.locationid=location.locationid where city is null;
+Empty set (0.00 sec)
+
+mysql> select d.dname, concat(e.fname,' ',e.lname)as name , l.city , l.address from department d inner join location l on d.locationid=l.locationid;
+ERROR 1054 (42S22): Unknown column 'e.fname' in 'field list'
+mysql> select d.dname, concat(e.fname,' ',e.lname)as name , l.city , l.address from department d inner join location l on d.locationid=l.locationid inner join employee e on d.deptid = e.deptid;
++-------+-----------------+---------+-----------+
+| dname | name            | city    | address   |
++-------+-----------------+---------+-----------+
+| Sales | Andrew Lusk     | Mumbai  | MBP       |
+| HR    | Nancy Greenberg | Pune    | Hinjewadi |
+| OPS   | Steven King     | Gurgaon | DLF 2     |
+| OPS   | Neena Kochhar   | Gurgaon | DLF 2     |
+| OPS   | Andy Hillman    | Gurgaon | DLF 2     |
+| OPS   | Rene Lopez      | Gurgaon | DLF 2     |
+| OPS   | Tanya Rff       | Gurgaon | DLF 2     |
+| OPS   | Sue Fisher      | Gurgaon | DLF 2     |
++-------+-----------------+---------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> select concat(emp.fname, ' ',emp.lname)as Emp_name,concat(mgr.fname,' ',mgr.lname)as mgrname from employee emp inner join employee mgr on emp.mgrid=mgr.empid;
++-----------------+-----------------+
+| Emp_name        | mgrname         |
++-----------------+-----------------+
+| Neena Kochhar   | Nancy Greenberg |
+| Nancy Greenberg | Steven King     |
+| Andrew Lusk     | Neena Kochhar   |
+| Pamela Davis    | Neena Kochhar   |
+| Andy Hillman    | Steven King     |
+| Rene Lopez      | Steven King     |
+| Tanya Rff       | Steven King     |
+| Sue Fisher      | Steven King     |
++-----------------+-----------------+
+8 rows in set (0.00 sec)
+
+mysql> select concat(emp.fname, ' ',emp.lname)as Emp_name,concat(mgr.fname,' ',mgr.lname)as mgrname from employee emp left outer join employee mgr on emp.mgrid=mgr.empid where emp.mgrid is null;
++-------------+---------+
+| Emp_name    | mgrname |
++-------------+---------+
+| Steven King | NULL    |
++-------------+---------+
+1 row in set (0.00 sec)
+
+mysql> select concat(emp.fname, ' ',emp.lname)as Emp_name from employee where salary =(select max(salary) from employee ));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> select concat(emp.fname, ' ',emp.lname)as Emp_name from employee where salary =(select max(salary) from employee where salary <(select max(salary) from employee));
+ERROR 1054 (42S22): Unknown column 'emp.fname' in 'field list'
+mysql> select concat(fname, ' ',lname)as Emp_name from employee where salary =(select max(salary) from employee where salary <(select max(salary) from employee));
++---------------+
+| Emp_name      |
++---------------+
+| Neena Kochhar |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select concat(emp.fname, ' ',emp.lname)as Emp_name, emp.salary count(distinct emp2.salary)as rowcnt from employee emp inner join employee emp2 on emp.salary <=emp2.salary group by emp.salaryconcat (emp.fname ,' ', emp.lname) having count(distinct emp2.salary)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'count(distinct emp2.salary)as rowcnt from employee emp inner join employee emp2 ' at line 1
+mysql> select concat(emp.fname, ' ',emp.lname)as Emp_name, emp.salary, count(distinct emp2.salary)as rowcnt from employee emp inner join employee emp2 on emp.salary <=emp2.salary group by emp.salary concat (emp.fname ,' ', emp.lname) having count(distinct emp2.salary)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'concat (emp.fname ,' ', emp.lname) having count(distinct emp2.salary)=1' at line 1
+mysql> select concat(emp.fname, ' ',emp.lname)as Emp_name, emp.salary, count(distinct emp2.salary)as rowcnt from employee emp inner join employee emp2 on emp.salary <=emp2.salary group by emp.salary concat (emp.fname ,' ', emp.lname) having count(distinct emp2.salary)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'concat (emp.fname ,' ', emp.lname) having count(distinct emp2.salary)=1' at line 1
+mysql>
+mysql>
+mysql>
+mysql> select concate (e1.fname,' ',e1.lname) as enpname, e1.salary,count(distinct e2.salary )as rowcat from emp e1 inner join emp e2 on e1 salry<= e2.salary
+    -> groupby e1.salary
+    -> concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=4;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salry<= e2.salary
+groupby e1.salary
+concat(e1.fname,' ',e1.lname) having count(' at line 1
+mysql> select concate (e1.fname,' ',e1.lname) as enpname, e1.salary,count(distinct e2.salary )as rowcat from emp e1 inner join emp e2 on e1 salary<= e2.salary
+    -> groupby e1.salary
+    -> concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=4;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'salary<= e2.salary
+groupby e1.salary
+concat(e1.fname,' ',e1.lname) having count' at line 1
+mysql> select concate (e1.fname,' ',e1.lname) as enpname, e1.salary,count(distinct e2.salary )as rowcat from emp e1 inner join emp e2 on e1 salary<= e2.salary
