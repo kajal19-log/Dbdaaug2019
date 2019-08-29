@@ -1,0 +1,65 @@
+
+mysql> create table Member
+    -> (
+    -> MemberId int auto_increment primary key,
+    -> Fname varchar(20) not null,
+    -> Mname varchar(10) not null,
+    -> Lname varchar(30) not null,
+    -> Mem_DOJ date,
+    -> Email varchar(50),
+    -> phone char(10),Mem_type Enum('Regular','silver','gold','Premium'));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from Member;
+Empty set (0.00 sec)
+
+mysql> describe Member;
++----------+-------------------------------------------+------+-----+---------+----------------+
+| Field    | Type                                      | Null | Key | Default | Extra          |
++----------+-------------------------------------------+------+-----+---------+----------------+
+| MemberId | int(11)                                   | NO   | PRI | NULL    | auto_increment |
+| Fname    | varchar(20)                               | NO   |     | NULL    |                |
+| Mname    | varchar(10)                               | NO   |     | NULL    |                |
+| Lname    | varchar(30)                               | NO   |     | NULL    |                |
+| Mem_DOJ  | date                                      | YES  |     | NULL    |                |
+| Email    | varchar(50)                               | YES  |     | NULL    |                |
+| phone    | char(10)                                  | YES  |     | NULL    |                |
+| Mem_type | enum('Regular','silver','gold','Premium') | YES  |     | NULL    |                |
++----------+-------------------------------------------+------+-----+---------+----------------+
+8 rows in set (0.01 sec)
+
+mysql> ALTER table Member add constraint Member_Email_UQ UNIQUE(Email);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+
+
+mysql> insert into Member (Fname,Mname,Lname,Mem_DOJ,Email,phone,Mem_type) values('Janet','s','King',NOW(),'sking@adventureworks.com','2526452561','gold');
+Query OK, 1 row affected, 1 warning (0.03 sec)
+
+mysql> insert into Member (Fname,Mname,Lname,Mem_DOJ,Email,phone,Mem_type) values('tammy','s','King',NOW(),'NULL','2526452561','silver');
+Query OK, 1 row affected, 1 warning (0.03 sec)
+
+mysql> insert into Member (Fname,Mname,Lname,Mem_DOJ,Email,phone,Mem_type) values('Andy','j','Hillman','2019-08-27','NULL','2526452561','silver');
+ERROR 1062 (23000): Duplicate entry 'NULL' for key 'Member_Email_UQ'
+mysql> select * from Member;
++----------+-------+-------+-------+------------+--------------------------+------------+----------+
+| MemberId | Fname | Mname | Lname | Mem_DOJ    | Email                    | phone      | Mem_type |
++----------+-------+-------+-------+------------+--------------------------+------------+----------+
+|        1 | Janet | s     | King  | 2019-08-27 | sking@adventureworks.com | 2526452561 | gold     |
+|        2 | tammy | s     | King  | 2019-08-27 | NULL                     | 2526452561 | silver   |
++----------+-------+-------+-------+------------+--------------------------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> insert into Member (Fname,Mname,Lname,Mem_DOJ,Email,phone,Mem_type) values('Andrew','j','codd',now(),'andrew@adventurework.com','2526452561','Premium');
+Query OK, 1 row affected, 1 warning (0.07 sec)
+
+mysql> select * from Member;
++----------+--------+-------+-------+------------+--------------------------+------------+----------+
+| MemberId | Fname  | Mname | Lname | Mem_DOJ    | Email                    | phone      | Mem_type |
++----------+--------+-------+-------+------------+--------------------------+------------+----------+
+|        1 | Janet  | s     | King  | 2019-08-27 | sking@adventureworks.com | 2526452561 | gold     |
+|        2 | tammy  | s     | King  | 2019-08-27 | NULL                     | 2526452561 | silver   |
+|        4 | Andrew | j     | codd  | 2019-08-27 | andrew@adventurework.com | 2526452561 | Premium  |
++----------+--------+-------+-------+------------+--------------------------+------------+----------+
+3 rows in set (0.00 sec)
