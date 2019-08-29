@@ -1,0 +1,10 @@
+mysql> select bookid,Bookname,price from Book Where Bookname LIKE 'A%';
+Empty set (0.01 sec)
+
+mysql> select length(Fname),Fname from Member where Fname LIKE 'J____';
++---------------+-------+
+| length(Fname) | Fname |
++---------------+-------+
+|             5 | Janet |
++---------------+-------+
+1 row in set (0.02 sec)
