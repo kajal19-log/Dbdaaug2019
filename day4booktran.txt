@@ -1,0 +1,71 @@
+
+mysql> create table BookTran
+    -> (
+    -> TrnID int auto_increment primary key,TrnDate datetime,bookid int references book(bookid),MemberId int, constraint BookTran_MemberId_FK Foreign key(MemberId)references Member(MemberId));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> drop table BookTran;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table BookTran
+    -> ( TRnId int auto_increment primary key,
+    -> TrnDate datetime ,bookid int references Book(bookid),
+    -> MemberId int references Member(MemberId));
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> describe BookTran;
++----------+----------+------+-----+---------+----------------+
+| Field    | Type     | Null | Key | Default | Extra          |
++----------+----------+------+-----+---------+----------------+
+| TRnId    | int(11)  | NO   | PRI | NULL    | auto_increment |
+| TrnDate  | datetime | YES  |     | NULL    |                |
+| bookid   | int(11)  | YES  |     | NULL    |                |
+| MemberId | int(11)  | YES  |     | NULL    |                |
++----------+----------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> drop table BookTran;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create table BookTran
+    -> (
+    ->  TRnId int auto_increment primary key,
+    -> TrnDate datetime ,bookid int,memberId int ,
+    -> constraint BookTran_bookid_Fk foreign key(bookid),
+    -> constraint BookTran_MemberId_Fk foreign key(MemberId) references Member(MemberId)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '
+constraint BookTran_MemberId_Fk foreign key(MemberId) references Member(MemberI' at line 5
+mysql> create table BookTran
+    -> (
+    ->  TRnId int auto_increment primary key,
+    -> TrnDate datetime ,bookid int,memberId int ,
+    -> constraint BookTran_bookid_Fk foreign key(bookid) references Book(bookid),
+    -> constraint BookTran_MemberId_Fk foreign key(MemberId) references Member(MemberId));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> describe BookTran;
++----------+----------+------+-----+---------+----------------+
+| Field    | Type     | Null | Key | Default | Extra          |
++----------+----------+------+-----+---------+----------------+
+| TRnId    | int(11)  | NO   | PRI | NULL    | auto_increment |
+| TrnDate  | datetime | YES  |     | NULL    |                |
+| bookid   | int(11)  | YES  | MUL | NULL    |                |
+| memberId | int(11)  | YES  | MUL | NULL    |                |
++----------+----------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+mysql> insert into BookTran(Trndate,bookid,MemberId) values (now(),4,1);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`adventurework`.`booktran`, CONSTRAINT `BookTran_bookid_Fk` FOREIGN KEY (`bookid`) REFERENCES `book` (`bookid`))
+mysql> insert into BookTran(Trndate,bookid,MemberId) values (now(),5,10);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`adventurework`.`booktran`, CONSTRAINT `BookTran_bookid_Fk` FOREIGN KEY (`bookid`) REFERENCES `book` (`bookid`))
+mysql> insert into BookTran(Trndate,bookid,MemberId) values (now(),1,1);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from BookTran;
++-------+---------------------+--------+----------+
+| TRnId | TrnDate             | bookid | memberId |
++-------+---------------------+--------+----------+
+|     3 | 2019-08-27 17:36:43 |      1 |        1 |
++-------+---------------------+--------+----------+
+1 row in set (0.00 sec)
